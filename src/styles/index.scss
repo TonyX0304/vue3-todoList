@@ -1,0 +1,14 @@
+// 引入清除默认样式
+// src/styles/index.scss
+@use './reset.scss' as *; // 使用 `as *` 表示全局引入
+// 或者命名空间方式：
+// @use './reset' as reset;
+
+/*
+    错误是因为你正在使用 Sass 的 @import 语法，
+    而最新版本的 Dart Sass 已经弃用了 @import，推荐改用 @use 或 @forward。
+*/
+// @import './reset.scss';
+
+
+

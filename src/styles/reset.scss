@@ -1,0 +1,84 @@
+/* =============================================
+   RESET.SCSS
+   - 重置浏览器默认样式，减少跨浏览器差异
+   - 基于 Eric Meyer's Reset v2.0 | 改进版
+============================================= */
+
+/* 移除所有元素的 margin 和 padding */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 推荐使用 border-box 盒模型 */
+}
+
+/* 重置 HTML 和 body 的基本样式 */
+html {
+  scroll-behavior: smooth; /* 平滑滚动 */
+}
+
+body {
+  line-height: 1.5; /* 默认行高 */
+  -webkit-font-smoothing: antialiased; /* 字体抗锯齿 */
+  text-rendering: optimizeLegibility; /* 优化字体渲染 */
+}
+
+/* 移除列表默认样式（ul, ol） */
+ul, ol {
+  list-style: none;
+}
+
+/* 移除链接默认下划线，并设置默认颜色 */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* 移除按钮默认样式 */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* 图片和嵌入内容优化 */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 表单元素重置 */
+input,
+textarea,
+select {
+  font: inherit;
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+/* 防止表格边框合并问题 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* 移除标题默认样式 */
+// h1, h2, h3, h4, h5, h6 {
+//   font-size: inherit;
+//   font-weight: inherit;
+// }
+
+/* 移除段落默认 margin */
+// p {
+//   margin-bottom: 1rem;
+// }
