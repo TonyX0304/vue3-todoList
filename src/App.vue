@@ -46,6 +46,7 @@ const clearCompleted = () => {
             <li v-for="item in listRef" :key="item.id" @click="item.done = !item.done">
               <el-checkbox size="large" v-model="item.done"></el-checkbox>
               <p :class="{done: item.done}">{{ item.content }}</p>
+              <Edit />
             </li>
           </ul>
         </div>
