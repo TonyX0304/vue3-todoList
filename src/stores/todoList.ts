@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 
@@ -12,6 +12,10 @@ interface TodoItem {
 
 export const useTodoList = defineStore('todoList', () => {
   const list = ref<TodoItem[]>([])
+
+  const notCompleted = computed(() => {
+    return list.value.filter(item => !item.done)
+  })
 
   const addItem = (content: string) => {
     list.value.unshift({
@@ -32,10 +36,10 @@ export const useTodoList = defineStore('todoList', () => {
   }
 
   const clearCompleted = () => {
-    list.value = list.value.filter((item) => !item.done)
+    list.value = notCompleted.value
   }
 
-  return { list, addItem, deleteItem, clearCompleted }
+  return { list, notCompleted, addItem, deleteItem, clearCompleted }
 }, {
   // 开启持久化 (第二个配置参数)
   persist: true

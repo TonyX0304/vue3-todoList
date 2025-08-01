@@ -47,14 +47,16 @@ const handleDelete = (i) => {
         <template #header>
           <div class="card-header">
             <h1>Todo List</h1>
-            <span>Get things done, one item at a time</span>
+            <span>
+              今日事今日毕，勿将今事待明日!.☕
+            </span>
           </div>
         </template>
         <div>
           <el-form @submit.prevent label-position="top">
             <el-form-item>
               <div class="input-box">
-                <el-input v-model="inputRef" size="large" autofocus @keyup.enter="submit" placeholder="Add a new task..." />
+                <el-input v-model="inputRef" size="large" autofocus @keyup.enter="submit" placeholder="新怎待办事项..." />
                 <el-button color="#6c5ce7" size="large" type="primary" :disabled="!inputRef" @click="submit">+</el-button>
                 <!-- <el-button color="#6c5ce7" type="primary" :icon="Plus" /> -->
                 <!-- <el-icon :size="20">
@@ -80,8 +82,11 @@ const handleDelete = (i) => {
         </div>
         <template #footer>
           <div class="counts">
-            <p>{{ todoListStore.list.length }} items left</p>
-            <p class="pointer" @click="todoListStore.clearCompleted">Clear completed</p>
+            <template v-if="todoListStore.notCompleted.length">
+              <p>还剩 {{ todoListStore.notCompleted.length }} 项没完成</p>
+              <p class="pointer" @click="todoListStore.clearCompleted" v-show="todoListStore.notCompleted.length">清除已完成</p>
+            </template>
+            <p v-else>完美收工</p>
           </div>
         </template>
       </el-card>
