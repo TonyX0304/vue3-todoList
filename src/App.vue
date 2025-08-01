@@ -82,11 +82,8 @@ const handleDelete = (i) => {
         </div>
         <template #footer>
           <div class="counts">
-            <template v-if="todoListStore.notCompleted.length">
-              <p>还剩 {{ todoListStore.notCompleted.length }} 项没完成</p>
-              <p class="pointer" @click="todoListStore.clearCompleted" v-show="todoListStore.notCompleted.length">清除已完成</p>
-            </template>
-            <p v-else>完美收工</p>
+            <p>{{todoListStore.notCompleted.length ? `还剩 ${ todoListStore.notCompleted.length } 项没完成` : '完美收工'}}</p>
+            <p class="pointer" @click="todoListStore.clearCompleted" v-show="todoListStore.list.length - todoListStore.notCompleted.length">清除已完成</p>
           </div>
         </template>
       </el-card>
