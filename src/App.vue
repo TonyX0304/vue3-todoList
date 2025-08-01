@@ -14,6 +14,21 @@ const submit = () => {
   inputRef.value = ''
 }
 
+let editItemValOld = ''
+const editItem = (item) => {
+  item.edit = true
+  editItemValOld = item.content
+}
+
+const editItemDone = (item) => {
+  item.edit = false
+  if (!item.content) {
+    item.content = editItemValOld
+    ElMessageBox.alert('待办项不能为空')
+  }
+  editItemValOld = ''
+}
+
 const handleDelete = (i) => {
   const item = todoListStore.list[i]
   if (!item.done) {
@@ -70,11 +85,11 @@ const handleDelete = (i) => {
             <li v-for="(item, i) in todoListStore.list" class="flex" :key="item.id" @click="item.done = !item.done">
               <div class="flex flex-1">
                 <el-checkbox size="large" v-model="item.done"></el-checkbox>
-                <el-input v-model="item.content" class="content" @click.stop @keyup.enter="item.edit = false" @blur="item.edit = false" placeholder="不能为空" v-if="item.edit"></el-input>
+                <el-input v-model.trim="item.content" class="content" @click.stop @keyup.enter="editItemDone(item)" @blur="editItemDone(item)" placeholder="不能为空" v-if="item.edit"></el-input>
                 <p :class="{done: item.done}" class="content" v-else>{{ item.content }}</p>
               </div>
               <div class="flex actions">
-                <el-button type="primary" @click.stop="" @click="item.edit = true" :disabled="item.edit || item.done" :icon="Edit" circle />
+                <el-button type="primary" @click.stop="" @click="editItem(item)" :disabled="item.edit || item.done" :icon="Edit" circle />
                 <el-button type="danger" @click.stop="" :icon="Delete" @click="handleDelete(i)" circle />
               </div>
             </li>
