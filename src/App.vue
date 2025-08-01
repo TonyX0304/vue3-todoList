@@ -1,7 +1,9 @@
 <script setup lang="ts">
-// import { ElButton } from 'element-plus'
+import { Edit, Delete } from '@element-plus/icons-vue'
+import { useCounterStore } from '@/stores/counter'
 const inputRef = ref<string>('')
 const listRef = ref([])
+const counterStore = useCounterStore()
 
 const submit = () => {
   if (!inputRef.value) return
@@ -9,8 +11,34 @@ const submit = () => {
     id: Math.random(),
     content: inputRef.value,
     done: false,
+    edit: false,
   })
   inputRef.value = ''
+}
+
+const handleDelete = (i) => {
+  const item = listRef.value[i]
+  if (!item.done) {
+    ElMessageBox.confirm('还未完成，确定删除么？', '温馨提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }).then(() => {
+      listRef.value.splice(i, 1)
+
+      ElMessage({
+        type: 'success',
+        message: '删除成功',
+      })
+    })
+  } else {
+    listRef.value.splice(i, 1)
+
+    ElMessage({
+      type: 'success',
+      message: '删除成功',
+    })
+  }
 }
 
 const clearCompleted = () => {
@@ -26,13 +54,15 @@ const clearCompleted = () => {
           <div class="card-header">
             <h1>Todo List</h1>
             <span>Get things done, one item at a time</span>
+
+            <h2>{{counterStore.count}}</h2>
           </div>
         </template>
         <div>
-          <el-form ref="form" @submit.prevent="submit" label-position="top">
+          <el-form @submit.prevent label-position="top">
             <el-form-item>
               <div class="input-box">
-                <el-input v-model="inputRef" size="large" placeholder="Add a new task..." />
+                <el-input v-model="inputRef" size="large" autofocus @keyup.enter="submit" placeholder="Add a new task..." />
                 <el-button color="#6c5ce7" size="large" type="primary" :disabled="!inputRef" @click="submit">+</el-button>
                 <!-- <el-button color="#6c5ce7" type="primary" :icon="Plus" /> -->
                 <!-- <el-icon :size="20">
@@ -43,10 +73,16 @@ const clearCompleted = () => {
           </el-form>
 
           <ul class="list">
-            <li v-for="item in listRef" :key="item.id" @click="item.done = !item.done">
-              <el-checkbox size="large" v-model="item.done"></el-checkbox>
-              <p :class="{done: item.done}">{{ item.content }}</p>
-              <Edit />
+            <li v-for="(item, i) in listRef" class="flex" :key="item.id" @click="item.done = !item.done">
+              <div class="flex flex-1">
+                <el-checkbox size="large" v-model="item.done"></el-checkbox>
+                <el-input v-model="item.content" class="content" @click.stop @keyup.enter="item.edit = false" @blur="item.edit = false" placeholder="不能为空" v-if="item.edit"></el-input>
+                <p :class="{done: item.done}" class="content" v-else>{{ item.content }}</p>
+              </div>
+              <div class="flex actions">
+                <el-button type="primary" @click.stop="" @click="item.edit = true" :disabled="item.edit || item.done" :icon="Edit" circle />
+                <el-button type="danger" @click.stop="" :icon="Delete" @click="handleDelete(i)" circle />
+              </div>
             </li>
           </ul>
         </div>
@@ -87,22 +123,31 @@ const clearCompleted = () => {
     padding: 20px;
     width: 100%;
   }
+  .flex {
+    display: flex;
+    align-items: center;
+  }
+  .flex-1 {
+    flex: 1;
+  }
   .list {
     max-height: 50vh;
     overflow: auto;
     li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      gap: 20px;
       border-top: 1px solid #f5f5f5;
       padding: 5px 20px;
       cursor: pointer;
+      justify-content: space-between;
       &:hover {
         background: #f9f9f9;
       }
       .done {
         text-decoration: line-through;
         color: #aaa;
+      }
+      .content {
+        margin-left: 10px;
       }
     }
   }

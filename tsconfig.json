@@ -9,6 +9,11 @@
     }
   ],
   "include": [
-    "src/auto-imports.d.ts"  // 显式包含自动生成的类型文件
+    // "src/auto-imports.d.ts"  // 显式包含自动生成的类型文件
+    
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "src/components.d.ts"
   ]
 }
