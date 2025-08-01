@@ -11,6 +11,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/vue3-todoList/',
   plugins: [
     vue(),
     vueDevTools(),
