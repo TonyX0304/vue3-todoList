@@ -1,30 +1,28 @@
 <script setup lang="ts">
+// import { storeToRefs } from 'pinia'
 import { Edit, Delete } from '@element-plus/icons-vue'
-import { useCounterStore } from '@/stores/counter'
+import { useTodoList } from '@/stores/todoList'
 const inputRef = ref<string>('')
-const listRef = ref([])
-const counterStore = useCounterStore()
+const todoListStore = useTodoList()
+// const todoList = todoListStore.list
+// 直接解构获取并保持响应性
+// const { list: todoList } = storeToRefs(useTodoList())
 
 const submit = () => {
   if (!inputRef.value) return
-  listRef.value.push({
-    id: Math.random(),
-    content: inputRef.value,
-    done: false,
-    edit: false,
-  })
+  todoListStore.addItem(inputRef.value)
   inputRef.value = ''
 }
 
 const handleDelete = (i) => {
-  const item = listRef.value[i]
+  const item = todoListStore.list[i]
   if (!item.done) {
     ElMessageBox.confirm('还未完成，确定删除么？', '温馨提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'warning',
     }).then(() => {
-      listRef.value.splice(i, 1)
+      todoListStore.deleteItem(i)
 
       ElMessage({
         type: 'success',
@@ -32,17 +30,13 @@ const handleDelete = (i) => {
       })
     })
   } else {
-    listRef.value.splice(i, 1)
+    todoListStore.deleteItem(i)
 
     ElMessage({
       type: 'success',
       message: '删除成功',
     })
   }
-}
-
-const clearCompleted = () => {
-  listRef.value = listRef.value.filter((item) => !item.done)
 }
 </script>
 
@@ -54,8 +48,6 @@ const clearCompleted = () => {
           <div class="card-header">
             <h1>Todo List</h1>
             <span>Get things done, one item at a time</span>
-
-            <h2>{{counterStore.count}}</h2>
           </div>
         </template>
         <div>
@@ -73,7 +65,7 @@ const clearCompleted = () => {
           </el-form>
 
           <ul class="list">
-            <li v-for="(item, i) in listRef" class="flex" :key="item.id" @click="item.done = !item.done">
+            <li v-for="(item, i) in todoListStore.list" class="flex" :key="item.id" @click="item.done = !item.done">
               <div class="flex flex-1">
                 <el-checkbox size="large" v-model="item.done"></el-checkbox>
                 <el-input v-model="item.content" class="content" @click.stop @keyup.enter="item.edit = false" @blur="item.edit = false" placeholder="不能为空" v-if="item.edit"></el-input>
@@ -88,8 +80,8 @@ const clearCompleted = () => {
         </div>
         <template #footer>
           <div class="counts">
-            <p>{{ listRef.length }} items left</p>
-            <p class="pointer" @click="clearCompleted">Clear completed</p>
+            <p>{{ todoListStore.list.length }} items left</p>
+            <p class="pointer" @click="todoListStore.clearCompleted">Clear completed</p>
           </div>
         </template>
       </el-card>

@@ -15,5 +15,11 @@
     "src/**/*.d.ts",
     "src/**/*.vue",
     "src/components.d.ts"
-  ]
+  ],
+  "compilerOptions": {
+    "baseUrl": "./",       // 基础路径
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
 }
