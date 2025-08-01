@@ -94,6 +94,8 @@ const handleDelete = (i) => {
               </div>
             </li>
           </ul>
+
+          <el-empty description="暂无待办项，请添加" v-show="!todoListStore.list.length" />
         </div>
         <template #footer>
           <div class="counts">
